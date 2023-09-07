@@ -1,0 +1,12 @@
+[Unit]
+Description=vmselect systemd service.
+
+[Service]
+User=root
+Type=simple
+ExecStart=/bin/vmselect-prod -httpListenAddr {{ host_ip.stdout }}:8481 {% for storage in storageNodes %}-storageNode={{ storage }}:8401 {% endfor %}
+Restart=always
+StandardOutput=file:/var/log/vmselect/vmselect.log
+
+[Install]
+WantedBy=multi-user.target

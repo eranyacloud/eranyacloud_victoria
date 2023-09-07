@@ -1,0 +1,6 @@
+---
+- hosts: "{{ machine }}"
+  tasks:
+    - name: Deploy Promethus with Victoria Metrics
+      import_role:
+        name: victoria

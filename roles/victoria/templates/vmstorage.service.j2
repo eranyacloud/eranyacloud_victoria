@@ -1,0 +1,10 @@
+[Unit]
+Description=vmstorage systemd service.
+[Service]
+User=root
+Type=simple
+ExecStart=/bin/vmstorage-prod -storageDataPath /opt/metric-storage -retentionPeriod {{retentionPeriod}} -httpListenAddr {{ host_ip.stdout }}:8482 -vminsertAddr {{ host_ip.stdout }}:8400 -vmselectAddr {{ host_ip.stdout }}:8401
+Restart=always
+StandardOutput=file:/var/log/vmstorage/vmstorage.log
+[Install]
+WantedBy=multi-user.target

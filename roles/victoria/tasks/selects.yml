@@ -1,0 +1,54 @@
+---
+
+- name: Copy vmselect-prod to /bin/
+  command: "rsync -av ~/victoriametric-binary/vmselect-prod /bin/"
+  tags:
+    - select
+
+- name: Create /var/log/vmselect/ directory
+  file:
+    path: /var/log/vmselect/
+    state: directory
+  tags:
+    - select
+
+- name: Get the host IP address
+  command: curl ifconfig.io
+  register: host_ip
+  tags:
+    - select
+
+- name: Create vmselect systemd service file
+  template:
+    src: vmselect.service.j2  # Use a Jinja2 template for the service file
+    dest: /etc/systemd/system/vmselect.service
+    mode: 0644  # Set appropriate permissions
+  tags:
+    - select
+
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+  tags:
+    - select
+
+- name: Start vmselect service
+  service:
+    name: vmselect
+    state: started
+    enabled: yes
+  tags:
+    - select
+
+- name: Check vmselect service status
+  systemd:
+    name: vmselect
+  register: vmselect_status
+  tags:
+    - select
+
+- name: Display vmselect service status
+  debug:
+    var: vmselect_status.stdout
+  tags:
+    - select
