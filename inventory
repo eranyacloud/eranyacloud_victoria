@@ -4,8 +4,10 @@
 185.213.165.166 ansible_user=root
 185.213.165.34 ansible_user=root
 185.213.165.180 ansible_user=root
-185.213.165.121 ansible_user=root
-185.213.165.204 ansible_user=root
+
+
+
+
 
 [storages]
 185.213.165.228
@@ -16,5 +18,6 @@
 185.213.165.180 ansible_user=root
 
 [ha]
-185.213.165.121
-185.213.165.204
+185.213.165.121 ansible_user=root
+185.213.165.204 ansible_user=root
+185.213.165.36 ansible_user=root

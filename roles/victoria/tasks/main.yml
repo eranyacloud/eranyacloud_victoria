@@ -4,3 +4,4 @@
 - include: storages.yml
 - include: selects.yml
 - include: inserts.yml
+- include: nginx.yml
