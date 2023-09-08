@@ -1,0 +1,54 @@
+---
+
+- name: Copy vminsert-prod to /bin/
+  command: "rsync -av ~/victoriametric-binary/vminsert-prod /bin/"
+  tags:
+    - insert
+
+- name: Create /var/log/vminsert/ directory
+  file:
+    path: /var/log/vminsert/
+    state: directory
+  tags:
+    - insert
+
+- name: Get the host IP address
+  command: curl ifconfig.io
+  register: host_ip
+  tags:
+    - insert
+
+- name: Create vminsert systemd service file
+  template:
+    src: vminsert.service.j2  # Use a Jinja2 template for the service file
+    dest: /etc/systemd/system/vminsert.service
+    mode: 0644  # Set appropriate permissions
+  tags:
+    - insert
+
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+  tags:
+    - insert
+
+- name: Start vminsert service
+  service:
+    name: vminsert
+    state: started
+    enabled: yes
+  tags:
+    - insert
+
+- name: Check vminsert service status
+  systemd:
+    name: vminsert
+  register: vminsert_status
+  tags:
+    - insert
+
+- name: Display vminsert service status
+  debug:
+    var: vminsert_status.stdout
+  tags:
+    - insert

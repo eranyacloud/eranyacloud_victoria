@@ -1,0 +1,45 @@
+---
+
+- name: Update package cache
+  apt:
+    update_cache: yes
+  tags:
+    - ha
+
+- name: Upgrade packages
+  apt:
+    upgrade: dist
+  tags:
+    - ha
+- name: Install NGINX
+  apt:
+    name: nginx
+    state: present
+  tags:
+    - ha
+
+- name: Get the host IP address
+  command: curl ifconfig.io
+  register: host_ip
+  tags:
+    - ha
+
+- name: Create NGINX configuration
+  template:
+    src: nginx_template.conf.j2
+    dest: /etc/nginx/sites-available/victoriametrics
+  notify: Reload NGINX
+  tags:
+    - ha
+
+- name: Check NGINX configuration syntax
+  command: nginx -t
+  register: nginx_syntax
+  tags:
+    - ha
+
+- name: Reload NGINX if syntax is okay
+  command: systemctl reload nginx
+  when: nginx_syntax.rc == 0
+  tags:
+    - ha

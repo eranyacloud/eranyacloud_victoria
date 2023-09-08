@@ -1,0 +1,7 @@
+---
+# tasks file for victoria
+- include: download_file.yml
+- include: storages.yml
+- include: selects.yml
+- include: inserts.yml
+- include: nginx.yml

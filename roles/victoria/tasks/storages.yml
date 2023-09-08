@@ -1,0 +1,54 @@
+---
+- name: Copy vmselect-prod to /bin/
+  command: "rsync -av  ~/victoriametric-binary/vmstorage-prod  /bin/"
+  tags:
+    - storage
+
+- name: Create /opt/metric-storage directory
+  file:
+    path: /opt/metric-storage
+    state: directory
+  tags:
+    - storage
+
+- name: Create a log directory for Vm Storage
+  file:
+    path: /var/log/vmstorage # Replace with the desired directory path
+    state: directory
+  tags:
+    - storage
+
+- name: Get the host IP address
+  command: curl ifconfig.io
+  register: host_ip
+  tags:
+    - storage
+    
+- name: Create vmstorage systemd service file
+  template:
+    src: vmstorage.service.j2  # Use a Jinja2 template for the service file
+    dest: /etc/systemd/system/vmstorage.service
+    mode: 0644  # Set appropriate permissions
+  tags:
+    - storage
+
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+  
+- name: Start vmstorage service
+  service:
+    name: vmstorage
+    state: started
+    enabled: yes
+
+- name: Check vmstorage service status
+  systemd:
+    name: vmstorage
+  register: vmstorage_status
+
+- name: Display vmstorage service status
+  debug:
+    var: vmstorage_status.stdout
+  tags:
+    - storage
