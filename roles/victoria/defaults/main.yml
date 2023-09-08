@@ -8,6 +8,10 @@ victoria_version: "v1.63.0"
 #VMSTORAGE
 retentionPeriod: 3d
 
+#prometheus
+prometheus_version: "2.47.0"
+prometheus_retention: 15d
+
 storageNodes:
   - 185.213.165.87
 #  - 185.213.165.89

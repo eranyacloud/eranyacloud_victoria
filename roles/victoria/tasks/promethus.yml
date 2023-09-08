@@ -1,0 +1,125 @@
+---
+# - name: Create a directory for VictoriaMetrics
+#   file:
+#     path: ~/prometheus_tools  # Replace with the desired directory path
+#     state: directory
+#   tags:
+#     - prometheus
+
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - /etc/prometheus
+    - /var/lib/prometheus
+    - ~/prometheus_tools  # Replace with your desired directory path
+  tags:
+    - prometheus
+
+- name: Download prometheus release using wget
+  command: wget https://github.com/prometheus/prometheus/releases/download/v{{prometheus_version}}/prometheus-{{prometheus_version}}.linux-amd64.tar.gz
+  args:
+    chdir: ~/prometheus_tools  # Change the working directory for this task
+  tags:
+    - prometheus
+
+- name: Extract prometheus files
+  command: tar -xvzf prometheus-{{prometheus_version}}.linux-amd64.tar.gz
+  args:
+    chdir: ~/prometheus_tools  # Change the working directory for this task
+  tags:
+    - prometheus
+
+- name: List files in the directory
+  command: ls
+  args:
+    chdir: ~/prometheus_tools  # Change the working directory for this task
+  tags:
+    - prometheus
+
+- name: Copy prometheus to /bin/
+  command: "rsync -av ~/prometheus_tools/prometheus-{{prometheus_version}}.linux-amd64/prometheus /usr/local/bin/prometheus"
+  tags:
+    - prometheus
+
+- name: Copy promtool to /bin/
+  command: "rsync -av ~/prometheus_tools/prometheus-{{prometheus_version}}.linux-amd64/promtool /usr/local/bin/"
+  tags:
+    - prometheus
+
+- name: Copy consoles to /etc/prometheus
+  command: "rsync -av ~/prometheus_tools/prometheus-{{prometheus_version}}.linux-amd64/consoles /etc/prometheus"
+  tags:
+    - prometheus
+
+- name: Copy console_libraries to /etc/prometheus
+  command: "rsync -av ~/prometheus_tools/prometheus-{{prometheus_version}}.linux-amd64/console_libraries /etc/prometheus"
+  tags:
+    - prometheus
+
+- name: Create /var/log/vminsert/ directory
+  file:
+    path: /var/log/prometheus/
+    state: directory
+  tags:
+    - prometheus
+
+- name: Get the host IP address
+  command: curl ifconfig.io
+  register: host_ip
+  tags:
+    - prometheus
+
+
+- name: Create prometheus systemd service file
+  template:
+    src: prometheus.service.j2  # Use a Jinja2 template for the service file
+    dest: /etc/systemd/system/prometheus.service
+    mode: 0644  # Set appropriate permissions
+  tags:
+    - prometheus
+
+- name: Create prometheus systemd service file
+  template:
+    src: prometheus.yml.j2  # Use a Jinja2 template for the service file
+    dest: /etc/prometheus/prometheus.yml
+    mode: 0644  # Set appropriate permissions
+  tags:
+    - prometheus
+
+
+- name: Create prometheus systemd service file
+  template:
+    src: prometheus.service.j2  # Use a Jinja2 template for the service file
+    dest: /etc/systemd/system/prometheus.service
+    mode: 0644  # Set appropriate permissions
+  tags:
+    - prometheus
+
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+  tags:
+    - prometheus
+
+- name: Start prometheus service
+  service:
+    name: prometheus
+    state: started
+    enabled: yes
+  tags:
+    - prometheus
+
+- name: Check prometheus service status
+  systemd:
+    name: prometheus
+  register: prometheus_status
+  tags:
+    - prometheus
+
+- name: Display prometheus service status
+  debug:
+    var: prometheus_status.stdout
+  tags:
+    - prometheus
