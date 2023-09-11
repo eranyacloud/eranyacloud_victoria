@@ -17,6 +17,16 @@
   tags:
     - prometheus
 
+
+- name: delete prometheus release using rm
+  command: rm -rf /prometheus-{{prometheus_version}}.linux-amd64.tar.gz*
+  args:
+    chdir: ~/prometheus_tools  # Change the working directory for this task
+  tags:
+    - prometheus
+
+
+
 - name: Download prometheus release using wget
   command: wget https://github.com/prometheus/prometheus/releases/download/v{{prometheus_version}}/prometheus-{{prometheus_version}}.linux-amd64.tar.gz
   args:
@@ -58,7 +68,7 @@
   tags:
     - prometheus
 
-- name: Create /var/log/vminsert/ directory
+- name: Create /var/log/prometheus/ directory
   file:
     path: /var/log/prometheus/
     state: directory
@@ -89,13 +99,6 @@
     - prometheus
 
 
-- name: Create prometheus systemd service file
-  template:
-    src: prometheus.service.j2  # Use a Jinja2 template for the service file
-    dest: /etc/systemd/system/prometheus.service
-    mode: 0644  # Set appropriate permissions
-  tags:
-    - prometheus
 
 - name: Reload systemd
   systemd:

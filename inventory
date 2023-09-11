@@ -5,10 +5,6 @@
 185.213.165.34 ansible_user=root
 185.213.165.180 ansible_user=root
 
-
-
-
-
 [storages]
 185.213.165.228
 

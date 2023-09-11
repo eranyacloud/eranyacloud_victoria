@@ -17,4 +17,4 @@ scrape_configs:
 
 # Remote write configuration
 remote_write:
-  - url: "http://192.168.78.78:8480/insert/0/prometheus/api/v1/write"
+  - url: "http://{{remote_write}}:8480/insert/0/prometheus/api/v1/write"

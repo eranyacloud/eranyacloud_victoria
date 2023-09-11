@@ -4,7 +4,10 @@ Description=vminsert systemd service.
 [Service]
 User=root
 Type=simple
-ExecStart=/bin/vminsert-prod -httpListenAddr {{ host_ip.stdout }}:8480 {% for storage in storageNodes %}-storageNode={{ storage }}:8400 {% endfor %}
+ExecStart=/bin/vminsert-prod -httpListenAddr {{ host_ip.stdout }}:8480 {% for storage in storageNodes %}-storageNode={{ storage }}:8400 
+
+{% endfor %}
+
 Restart=always
 StandardOutput=file:/var/log/vminsert/vminsert.log
 

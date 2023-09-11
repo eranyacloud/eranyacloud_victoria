@@ -11,12 +11,34 @@
     upgrade: dist
   tags:
     - ha
-- name: Install NGINX
+
+- name: Update apt cache
   apt:
-    name: nginx
+    update_cache: yes
+  tags: loadbalancer
+
+- name: Install keepalived and nginx
+  apt:
+    name: "{{ item }}"
     state: present
-  tags:
-    - ha
+  loop:
+    - keepalived
+    - nginx
+  tags: ha
+
+- name: Create keepalived.conf file
+  template:
+    src:  keepalived.conf.j2 # Replace with the path to your template file
+    dest: /etc/keepalived/keepalived.conf
+    mode: '644'
+  tags: ha
+
+- name: Enable and start keepalived service
+  service:
+    name: keepalived
+    state: started
+    enabled: yes
+  tags: ha
 
 - name: Get the host IP address
   command: curl ifconfig.io
