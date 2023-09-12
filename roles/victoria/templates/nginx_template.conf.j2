@@ -1,24 +1,24 @@
 upstream vminsert {
     {% for select_insert in select_inserts %}
-    server {{ select_insert }}:8400; 
+    server {{ select_insert }}:8480;
     {% endfor %}
 }
 
 upstream vmselect {
     {% for select_insert in select_inserts %}
-    server {{ select_insert }}:8481; 
+    server {{ select_insert }}:8481;
     {% endfor %}
 }
 
 server {
-    listen {{ virtual_ip_address }}:8480;
+    listen *:8480;
     location / {
         proxy_pass http://vminsert;
     }
 }
 
 server {
-    listen {{ virtual_ip_address }}:8481;
+    listen *:8481;
     location / {
         proxy_pass http://vmselect;
     }

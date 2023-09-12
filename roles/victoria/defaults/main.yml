@@ -12,7 +12,7 @@ retentionPeriod: 3d
 prometheus_version: "2.47.0"
 nodeexporter_version: "1.6.1"
 prometheus_retention: 15d
-remote_write: 185.213.165.228
+remote_write: 185.213.165.167
 
 ## Keepalived
 interfaces: eth0

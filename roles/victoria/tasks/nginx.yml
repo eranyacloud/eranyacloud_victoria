@@ -5,17 +5,21 @@
     update_cache: yes
   tags:
     - ha
-
+    - all
 - name: Upgrade packages
   apt:
     upgrade: dist
   tags:
     - ha
+    - all
 
 - name: Update apt cache
   apt:
     update_cache: yes
-  tags: loadbalancer
+  tags:
+    - ha
+    - keepalived
+    - all
 
 - name: Install keepalived and nginx
   apt:
@@ -24,27 +28,34 @@
   loop:
     - keepalived
     - nginx
-  tags: ha
-
+  tags:
+    - keepalived
+    - all
 - name: Create keepalived.conf file
   template:
     src:  keepalived.conf.j2 # Replace with the path to your template file
     dest: /etc/keepalived/keepalived.conf
     mode: '644'
-  tags: ha
+  tags:
+    - keepalived
+    - all
 
 - name: Enable and start keepalived service
   service:
     name: keepalived
     state: started
     enabled: yes
-  tags: ha
+  tags:
+    - keepalived
+    - all
 
 - name: Get the host IP address
   command: curl ifconfig.io
   register: host_ip
   tags:
     - ha
+    - all
+    - keepalived
 
 - name: Create NGINX configuration
   template:
@@ -53,15 +64,18 @@
   notify: Reload NGINX
   tags:
     - ha
+    - all
 
 - name: Check NGINX configuration syntax
   command: nginx -t
   register: nginx_syntax
   tags:
     - ha
+    - all
 
 - name: Reload NGINX if syntax is okay
   command: systemctl reload nginx
   when: nginx_syntax.rc == 0
   tags:
     - ha
+    - all

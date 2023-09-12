@@ -1,4 +1,4 @@
-echo '[Unit]
+[Unit]
 Description=Node Exporter
 Wants=network-online.target
 After=network-online.target
@@ -10,4 +10,4 @@ Type=simple
 ExecStart=/usr/local/bin/node_exporter --collector.systemd
 
 [Install]
-WantedBy=multi-user.target' > /etc/systemd/system/node_exporter.service
+WantedBy=multi-user.target
