@@ -66,6 +66,16 @@
     - ha
     - all
 
+
+- name: Create symlink
+  command: ln -s /etc/nginx/sites-available/victoriametrics /etc/nginx/sites-enabled/victoriametrics
+  args:
+    creates: /etc/nginx/sites-enabled/victoriametrics
+  notify: Reload NGINX
+  tags:
+    - ha
+    - all
+
 - name: Check NGINX configuration syntax
   command: nginx -t
   register: nginx_syntax
@@ -79,3 +89,4 @@
   tags:
     - ha
     - all
+
