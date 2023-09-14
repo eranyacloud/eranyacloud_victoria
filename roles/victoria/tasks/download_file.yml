@@ -4,24 +4,24 @@
     path: ~/victoriametric-binary  # Replace with the desired directory path
     state: directory
   tags:
-    - all
+    - preinstall
 - name: Download VictoriaMetrics release using wget
   command: wget https://github.com/VictoriaMetrics/VictoriaMetrics/releases/download/{{victoria_version}}/victoria-metrics-amd64-{{victoria_version}}-cluster.tar.gz
   args:
     chdir: ~/victoriametric-binary  # Change the working directory for this task
   tags:
-    - all
+    - preinstall
 
 - name: Extract VictoriaMetrics files
   command: tar -xvzf victoria-metrics-amd64-{{victoria_version}}-cluster.tar.gz
   args:
     chdir: ~/victoriametric-binary  # Change the working directory for this task
   tags:
-    - all
+    - preinstall
 
 - name: List files in the directory
   command: ls
   args:
     chdir: ~/victoriametric-binary  # Change the working directory for this task
   tags:
-    - all
+    - preinstall

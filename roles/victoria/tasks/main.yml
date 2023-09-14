@@ -6,3 +6,4 @@
 - include: inserts.yml
 - include: nginx.yml
 - include: promethus.yml
+- include: node_exporter.yml

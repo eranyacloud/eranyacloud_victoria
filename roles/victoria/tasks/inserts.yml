@@ -35,7 +35,7 @@
 - name: Start vminsert service
   service:
     name: vminsert
-    state: started
+    state: restarted
     enabled: yes
   tags:
     - insert
