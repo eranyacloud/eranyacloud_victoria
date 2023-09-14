@@ -16,7 +16,6 @@
     - ~/prometheus_tools  # Replace with your desired directory path
   tags:
     - prometheus
-    - all
 
 
 - name: delete prometheus release using rm
@@ -25,7 +24,6 @@
     chdir: ~/prometheus_tools  # Change the working directory for this task
   tags:
     - prometheus
-    - all
 
 
 - name: Download prometheus release using wget
@@ -34,7 +32,6 @@
     chdir: ~/prometheus_tools  # Change the working directory for this task
   tags:
     - prometheus
-    - all
 
 
 - name: Extract prometheus files
@@ -43,7 +40,6 @@
     chdir: ~/prometheus_tools  # Change the working directory for this task
   tags:
     - prometheus
-    - all
 
 
 - name: List files in the directory
@@ -52,35 +48,30 @@
     chdir: ~/prometheus_tools  # Change the working directory for this task
   tags:
     - prometheus
-    - all
 
 
 - name: Copy prometheus to /bin/
   command: "rsync -av ~/prometheus_tools/prometheus-{{prometheus_version}}.linux-amd64/prometheus /usr/local/bin/prometheus"
   tags:
     - prometheus
-    - all
 
 
 - name: Copy promtool to /bin/
   command: "rsync -av ~/prometheus_tools/prometheus-{{prometheus_version}}.linux-amd64/promtool /usr/local/bin/"
   tags:
     - prometheus
-    - all
 
 
 - name: Copy consoles to /etc/prometheus
   command: "rsync -av ~/prometheus_tools/prometheus-{{prometheus_version}}.linux-amd64/consoles /etc/prometheus"
   tags:
     - prometheus
-    - all
 
 
 - name: Copy console_libraries to /etc/prometheus
   command: "rsync -av ~/prometheus_tools/prometheus-{{prometheus_version}}.linux-amd64/console_libraries /etc/prometheus"
   tags:
     - prometheus
-    - all
 
 
 - name: Create /var/log/prometheus/ directory
@@ -89,7 +80,6 @@
     state: directory
   tags:
     - prometheus
-    - all
 
 
 - name: Get the host IP address
@@ -97,8 +87,6 @@
   register: host_ip
   tags:
     - prometheus
-    - all
-
 
 
 - name: Create prometheus systemd service file
@@ -108,7 +96,6 @@
     mode: 0644  # Set appropriate permissions
   tags:
     - prometheus
-    - all
 
 
 - name: Create prometheus systemd service file
@@ -118,9 +105,6 @@
     mode: 0644  # Set appropriate permissions
   tags:
     - prometheus
-    - all
-
-
 
 
 - name: Reload systemd
@@ -128,7 +112,6 @@
     daemon_reload: yes
   tags:
     - prometheus
-    - all
 
 
 - name: Start prometheus service
@@ -138,7 +121,6 @@
     enabled: yes
   tags:
     - prometheus
-    - all
 
 
 - name: Check prometheus service status
@@ -147,7 +129,6 @@
   register: prometheus_status
   tags:
     - prometheus
-    - all
 
 
 - name: Display prometheus service status
@@ -155,4 +136,3 @@
     var: prometheus_status.stdout
   tags:
     - prometheus
-    - all
