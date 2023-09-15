@@ -31,6 +31,7 @@ A brief description of the role goes here.
 
 
 <img src="./img/Cluster-VictoriaMetrics_cluster-scheme.png"/>
+
 Requirements
 ------------
 
